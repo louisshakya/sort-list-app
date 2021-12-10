@@ -25,6 +25,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifyDataSetChanged();
     }
 
+    //Returns a viewholder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -32,6 +33,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new ViewHolder(view);
     }
 
+    //Updates the values of the different components in the view holder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.listIdTextView.setText(list.get(position).getListId());
@@ -39,11 +41,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.nameTextView.setText(list.get(position).getName());
     }
 
+    //returns size of list
     @Override
     public int getItemCount() {
         return list.size();
     }
 
+    //Creating ViewHolder Class for the list view
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView nameTextView;
