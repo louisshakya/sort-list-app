@@ -1,6 +1,7 @@
 package com.louis.sortlist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -69,36 +70,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.listIdButtonId) {
+            isSortByNamePressed = false;
+            isSortByBothPressed = false;
+            sortByNameButton.setBackgroundColor(ContextCompat.getColor(this,R.color.white));
+            sortByBothButton.setBackgroundColor(ContextCompat.getColor(this,R.color.white));
             ArrayList<Lists> newList = new ArrayList<>(getLists());
             if (isSortByListIDPressed) {
                 isSortByListIDPressed = false;
                 updateRecyclerView(newList);
+                sortByListButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
             } else {
                 isSortByListIDPressed = true;
                 sortByListId(newList);
                 updateRecyclerView(newList);
+                sortByListButton.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_200));
             }
         }
         if (v.getId() == R.id.nameButtonId) {
+            isSortByListIDPressed = false;
+            isSortByBothPressed = false;
+            sortByListButton.setBackgroundColor(ContextCompat.getColor(this,R.color.white));
+            sortByBothButton.setBackgroundColor(ContextCompat.getColor(this,R.color.white));
             ArrayList<Lists> newList = new ArrayList<>(getLists());
             if (isSortByNamePressed) {
                 isSortByNamePressed = false;
                 updateRecyclerView(newList);
+                sortByNameButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
             } else {
                 isSortByNamePressed = true;
                 sortByName(newList);
                 updateRecyclerView(newList);
+                sortByNameButton.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_200));
             }
         }
         if (v.getId() == R.id.bothButtonId) {
+            isSortByNamePressed = false;
+            isSortByListIDPressed = false;
+            sortByNameButton.setBackgroundColor(ContextCompat.getColor(this,R.color.white));
+            sortByListButton.setBackgroundColor(ContextCompat.getColor(this,R.color.white));
             ArrayList<Lists> newList = new ArrayList<>(getLists());
             if (isSortByBothPressed) {
                 isSortByBothPressed = false;
                 updateRecyclerView(newList);
+                sortByBothButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
             } else {
                 isSortByBothPressed = true;
                 ArrayList<Lists> sortedList = sortByBoth(newList);
                 updateRecyclerView(sortedList);
+                sortByBothButton.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_200));
             }
         }
     }
