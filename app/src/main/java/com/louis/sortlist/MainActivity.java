@@ -11,9 +11,25 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String URL = "https://fetch-hiring.s3.amazonaws.com/hiring.json";
+    private ArrayList<Lists> lists = new ArrayList<>();
+
+    public ArrayList<Lists> getLists() {
+        return lists;
+    }
+
+    public void setLists(ArrayList<Lists> list) {
+        lists = list;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +64,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void parseData(String response) {
+        ArrayList<Lists> list = new ArrayList<>();
+        try {
+            JSONArray mainArray = new JSONArray(response);
+            for (int i = 0; i < mainArray.length(); i++) {
+                JSONObject object = mainArray.getJSONObject(i);
+                String id = object.getString("id");
+                String listId = object.getString("listId");
+                String name = object.getString("name");
+                list.add(new Lists(id,listId,name));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        removeEmptyNames(list);
+        setLists(list);
+    }
 
+    public void removeEmptyNames(ArrayList<Lists> name) {
+        Iterator<Lists> itr = name.iterator();
+        while (itr.hasNext()) {
+            Lists l = itr.next();
+            if (l.getName().equals("") || l.getName().equals("null")) {
+                itr.remove();
+            }
+        }
     }
 }
