@@ -1,6 +1,8 @@
 package com.louis.sortlist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
@@ -15,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String URL = "https://fetch-hiring.s3.amazonaws.com/hiring.json";
     private ArrayList<Lists> lists = new ArrayList<>();
+    private RecyclerView recyclerView;
 
     public ArrayList<Lists> getLists() {
         return lists;
@@ -36,7 +40,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initialize();
         fetchData(URL);
+    }
+
+
+    public void initialize() {
+        recyclerView = findViewById(R.id.recyclerViewId);
     }
 
 
@@ -79,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         }
         removeEmptyNames(list);
         setLists(list);
+        updateRecyclerView(list);
     }
 
     public void removeEmptyNames(ArrayList<Lists> name) {
@@ -89,5 +100,12 @@ public class MainActivity extends AppCompatActivity {
                 itr.remove();
             }
         }
+    }
+
+    public void updateRecyclerView(ArrayList<Lists> list) {
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this);
+        adapter.setList(list);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
     }
 }

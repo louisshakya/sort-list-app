@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewNameId"
+        android:text="Name: "
+        android:textStyle="bold"
+        android:textColor="@color/purple_500"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nameTextViewId"
+        android:text="Name"
+        android:textColor="@color/purple_200"
+        android:textSize="20sp"
+        android:layout_toEndOf="@id/textViewNameId"
+        android:layout_marginStart="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewListId"
+        android:text="List ID: "
+        android:textStyle="bold|italic"
+        android:textColor="@color/purple_500"
+        android:layout_below="@id/textViewNameId"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listIdTextViewId"
+        android:text="List ID"
+        android:textColor="@color/purple_200"
+        android:layout_toEndOf="@id/textViewNameId"
+        android:layout_marginStart="5dp"
+        android:layout_below="@id/nameTextViewId"
+        android:textStyle="italic"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewId"
+        android:text="ID: "
+        android:textStyle="bold|italic"
+        android:textColor="@color/purple_500"
+        android:layout_below="@id/textViewNameId"
+        android:layout_toEndOf="@id/listIdTextViewId"
+        android:layout_marginStart="50dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/idTextViewId"
+        android:text="ID"
+        android:textColor="@color/purple_200"
+        android:layout_toEndOf="@id/textViewId"
+        android:layout_marginStart="5dp"
+        android:layout_below="@id/nameTextViewId"
+        android:textStyle="italic"/>
+
+</RelativeLayout>
