@@ -48,6 +48,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void parseData(String response) {
-        
+
     }
 }
