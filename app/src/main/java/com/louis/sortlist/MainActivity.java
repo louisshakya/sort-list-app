@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,12 +20,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fetchData(URL);
     }
 
-
+    //Initializing components
     public void initialize() {
         recyclerView = findViewById(R.id.recyclerViewId);
 
@@ -67,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sortByBothButton.setOnClickListener(this);
     }
 
+
+    //Logic for button clicks
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.listIdButtonId) {
@@ -148,9 +148,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void parseData(String response) {
         ArrayList<Lists> list = new ArrayList<>();
         try {
+
+            //Creating JSON array
             JSONArray mainArray = new JSONArray(response);
+
             for (int i = 0; i < mainArray.length(); i++) {
+
+                //Creating JSON object
                 JSONObject object = mainArray.getJSONObject(i);
+
+                //Parsing data
                 String id = object.getString("id");
                 String listId = object.getString("listId");
                 String name = object.getString("name");
@@ -158,12 +165,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("An error occurred while parsing data");
         }
         removeEmptyNames(list);
         setLists(list);
         updateRecyclerView(list);
     }
 
+    //Removes null values for names
     public void removeEmptyNames(ArrayList<Lists> name) {
         Iterator<Lists> itr = name.iterator();
         while (itr.hasNext()) {
@@ -174,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //Updates RecyclerView to display the list
     public void updateRecyclerView(ArrayList<Lists> list) {
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this);
         adapter.setList(list);
@@ -181,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
     }
 
+    //Sorts the list by list id in ascending order
     public void sortByListId(ArrayList<Lists> list) {
         Collections.sort(list, new Comparator<Lists>() {
             @Override
@@ -190,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    //Sorts the list by name in ascending order
     public void sortByName(ArrayList<Lists> list) {
         Collections.sort(list, new Comparator<Lists>() {
             @Override
@@ -199,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    //Sorts the list first by list id and then by name in ascending order
     public ArrayList<Lists> sortByBoth(ArrayList<Lists> list) {
         sortByListId(list);
         int listIDValue = Integer.parseInt(list.get(list.size() - 1).getListId());
