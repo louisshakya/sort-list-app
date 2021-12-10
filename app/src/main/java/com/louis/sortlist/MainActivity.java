@@ -5,6 +5,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,13 +22,18 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String URL = "https://fetch-hiring.s3.amazonaws.com/hiring.json";
     private ArrayList<Lists> lists = new ArrayList<>();
     private RecyclerView recyclerView;
+    private Button sortByListButton, sortByNameButton, sortByBothButton;
+    private boolean isSortByListIDPressed, isSortByNamePressed, isSortByBothPressed = false;
 
     public ArrayList<Lists> getLists() {
         return lists;
@@ -41,14 +49,59 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initialize();
+        updateRecyclerView(lists);
         fetchData(URL);
     }
 
 
     public void initialize() {
         recyclerView = findViewById(R.id.recyclerViewId);
+
+        sortByListButton = findViewById(R.id.listIdButtonId);
+        sortByNameButton = findViewById(R.id.nameButtonId);
+        sortByBothButton = findViewById(R.id.bothButtonId);
+
+        sortByListButton.setOnClickListener(this);
+        sortByNameButton.setOnClickListener(this);
+        sortByBothButton.setOnClickListener(this);
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.listIdButtonId) {
+            ArrayList<Lists> newList = new ArrayList<>(getLists());
+            if (isSortByListIDPressed) {
+                isSortByListIDPressed = false;
+                updateRecyclerView(newList);
+            } else {
+                isSortByListIDPressed = true;
+                sortByListId(newList);
+                updateRecyclerView(newList);
+            }
+        }
+        if (v.getId() == R.id.nameButtonId) {
+            ArrayList<Lists> newList = new ArrayList<>(getLists());
+            if (isSortByNamePressed) {
+                isSortByNamePressed = false;
+                updateRecyclerView(newList);
+            } else {
+                isSortByNamePressed = true;
+                sortByName(newList);
+                updateRecyclerView(newList);
+            }
+        }
+        if (v.getId() == R.id.bothButtonId) {
+            ArrayList<Lists> newList = new ArrayList<>(getLists());
+            if (isSortByBothPressed) {
+                isSortByBothPressed = false;
+                updateRecyclerView(newList);
+            } else {
+                isSortByBothPressed = true;
+                ArrayList<Lists> sortedList = sortByBoth(newList);
+                updateRecyclerView(sortedList);
+            }
+        }
+    }
 
     public void fetchData(String URL) {
 
@@ -107,5 +160,40 @@ public class MainActivity extends AppCompatActivity {
         adapter.setList(list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+    }
+
+    public void sortByListId(ArrayList<Lists> list) {
+        Collections.sort(list, new Comparator<Lists>() {
+            @Override
+            public int compare(Lists o1, Lists o2) {
+                return o1.getListId().compareToIgnoreCase(o2.getListId());
+            }
+        });
+    }
+
+    public void sortByName(ArrayList<Lists> list) {
+        Collections.sort(list, new Comparator<Lists>() {
+            @Override
+            public int compare(Lists o1, Lists o2) {
+                return o1.getName().compareToIgnoreCase(o2.getName());
+            }
+        });
+    }
+
+    public ArrayList<Lists> sortByBoth(ArrayList<Lists> list) {
+        sortByListId(list);
+        int listIDValue = Integer.parseInt(list.get(list.size() - 1).getListId());
+        ArrayList<Lists> newSortedArray = new ArrayList<>();
+        for (int i = 0; i <= listIDValue; i++) {
+            ArrayList<Lists> tempArray = new ArrayList<>();
+            for (Lists l: list) {
+                if (Integer.parseInt(l.getListId()) == i) {
+                    tempArray.add(l);
+                }
+            }
+            sortByName(tempArray);
+            newSortedArray.addAll(tempArray);
+        }
+        return newSortedArray;
     }
 }
